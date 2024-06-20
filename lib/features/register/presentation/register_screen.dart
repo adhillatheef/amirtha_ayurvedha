@@ -1,3 +1,4 @@
+import 'package:amirtha_ayurvedha/common/widgets/common_loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../controller/registration_screen_provider.dart';
@@ -38,6 +39,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   String? selectedMinutes;
   String? selectedTreatment;
   List<Treatment> treatments = [];
+  bool paymentMethodSelected = true;
   List<String> keralaStates = [
     'Alappuzha',
     'Ernakulam',
@@ -58,7 +60,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<RegistrationScreenProvider>(context, listen: false)
           .getTreatmentList();
       Provider.of<RegistrationScreenProvider>(context, listen: false)
@@ -73,6 +75,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
     addressController.dispose();
     totalAmountController.dispose();
     discountAmountController.dispose();
+    advanceAmountController.dispose();
+    balanceAmountController.dispose();
+    dateController.dispose();
     super.dispose();
   }
 
@@ -95,23 +100,25 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: false,
-        title: const Text('Register'),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: Image.asset('assets/icons/notification_icon.png'),
-          )
-        ],
-      ),
-      body: Consumer<RegistrationScreenProvider>(
-        builder: (context, provider, _) {
-          return SingleChildScrollView(
+    return Consumer<RegistrationScreenProvider>(builder: (context, value, _) {
+      return LoadingWidget(
+        isLoading: value.isLoading,
+        child: Scaffold(
+          appBar: AppBar(
+            centerTitle: false,
+            title: const Text('Register'),
+            actions: [
+              IconButton(
+                onPressed: () {},
+                icon: Image.asset('assets/icons/notification_icon.png'),
+              )
+            ],
+          ),
+          body: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(20),
               child: Form(
+                autovalidateMode: AutovalidateMode.onUserInteraction,
                 key: _formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -149,7 +156,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     SizedBoxes.normalSizedBox,
                     const CommonTextFieldText(text: 'Branch'),
                     TextFieldWithDropDown(
-                      options: provider.branchList
+                      options: value.branchList
                           .map((branch) => branch.name!)
                           .toList(), // Use branchList from provider
                       hintText: 'Select your branch',
@@ -169,7 +176,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     CommonButton(
                       buttonText: '+ Add Treatment',
                       onPressed: () {
-                        _openTreatmentDialog(provider.treatmentList);
+                        _openTreatmentDialog(value.treatmentList);
                       },
                       color: AppPalette.lightGreenColor,
                       textColor: Colors.black,
@@ -197,10 +204,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       onChanged: (value) {
                         setState(() {
                           paymentMethod = value;
+                          paymentMethodSelected = true;
                           debugPrint(paymentMethod);
                         });
                       },
                     ),
+                    if (!paymentMethodSelected)
+                      const Text(
+                        'Please select a payment method',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: AppPalette.errorColor,
+                        ),
+                      ),
                     SizedBoxes.normalSizedBox,
                     CommonTextField(
                       hintText: '',
@@ -239,15 +255,27 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       },
                     ),
                     SizedBoxes.largeSizedBox,
-                    CommonButton(buttonText: 'Save', onPressed: () {}),
+                    CommonButton(
+                        buttonText: 'Save',
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            if(paymentMethod == null){
+                              setState(() {
+                                paymentMethodSelected = false;
+                              });
+                            }else {
+
+                            }
+                          }
+                        }),
                     SizedBoxes.largeSizedBox,
                   ],
                 ),
               ),
             ),
-          );
-        },
-      ),
-    );
+          ),
+        ),
+      );
+    });
   }
 }

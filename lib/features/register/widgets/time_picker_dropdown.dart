@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../../../common/theme/app_palatte.dart';
 
 class TimePickerDropdown extends StatefulWidget {
@@ -25,16 +24,19 @@ class _TimePickerDropdownState extends State<TimePickerDropdown> {
   final List<String> minutes =
   List<String>.generate(60, (int index) => index.toString().padLeft(2, '0'));
 
+
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         Expanded(
-          child: _buildDropdown(
+          child: DropdownButtonFormField<String>(
+            icon: const Icon(
+              Icons.keyboard_arrow_down,
+              color: AppPalette.appColor,
+            ),
             value: _selectedHour,
-            items: hours,
-            hint: 'Hour',
             onChanged: (String? newValue) {
               setState(() {
                 _selectedHour = newValue;
@@ -43,14 +45,34 @@ class _TimePickerDropdownState extends State<TimePickerDropdown> {
                 widget.onHourChanged!(newValue);
               }
             },
+            decoration: const InputDecoration(
+              hintText: 'Hour',
+            ),
+            items: hours
+                .map((String option) => DropdownMenuItem<String>(
+              value: option,
+              child: Text(option),
+            ))
+                .toList(),
+            validator: (value){
+              if(value == null){
+                return 'Please select Hour';
+              }else {
+                return null;
+              }
+            },
           ),
         ),
-        const SizedBox(width: 20,),
+        const SizedBox(
+          width: 20,
+        ),
         Expanded(
-          child: _buildDropdown(
+          child: DropdownButtonFormField<String>(
+            icon: const Icon(
+              Icons.keyboard_arrow_down,
+              color: AppPalette.appColor,
+            ),
             value: _selectedMinute,
-            items: minutes,
-            hint: 'Minutes',
             onChanged: (String? newValue) {
               setState(() {
                 _selectedMinute = newValue;
@@ -59,34 +81,25 @@ class _TimePickerDropdownState extends State<TimePickerDropdown> {
                 widget.onMinuteChanged!(newValue);
               }
             },
+            decoration: const InputDecoration(
+              hintText: 'Minute',
+            ),
+            items: minutes
+                .map((String option) => DropdownMenuItem<String>(
+              value: option,
+              child: Text(option),
+            ))
+                .toList(),
+            validator: (value){
+              if(value == null){
+                return 'Please select Minute';
+              }else {
+                return null;
+              }
+            },
           ),
         ),
       ],
-    );
-  }
-
-  Widget _buildDropdown({
-    required String? value,
-    required List<String> items,
-    required String hint,
-    required ValueChanged<String?> onChanged,
-  }) {
-    return DropdownButtonFormField<String>(
-      icon: const Icon(
-        Icons.keyboard_arrow_down,
-        color: AppPalette.appColor,
-      ),
-      value: value,
-      onChanged: onChanged,
-      decoration: InputDecoration(
-        hintText: hint,
-      ),
-      items: items
-          .map((String option) => DropdownMenuItem<String>(
-        value: option,
-        child: Text(option),
-      ))
-          .toList(),
     );
   }
 }

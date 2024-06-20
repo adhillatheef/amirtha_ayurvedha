@@ -27,6 +27,7 @@ class _TreatmentDialogState extends State<TreatmentDialog> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
+      clipBehavior: Clip.none,
       insetPadding: const EdgeInsets.all(10),
       backgroundColor: Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -38,14 +39,16 @@ class _TreatmentDialogState extends State<TreatmentDialog> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text('Choose Treatment'),
-              TextFieldWithDropDown(
-                options: widget.treatmentList,
-                hintText: 'Choose preferred treatment',
-                onChanged: (value) {
-                  setState(() {
-                    selectedTreatment = value;
-                  });
-                },
+              Flexible(
+                child: TextFieldWithDropDown(
+                  options: widget.treatmentList,
+                  hintText: 'Choose preferred treatment',
+                  onChanged: (value) {
+                    setState(() {
+                      selectedTreatment = value;
+                    });
+                  },
+                ),
               ),
               SizedBoxes.normalSizedBox,
               const Text('Add Patients'),
