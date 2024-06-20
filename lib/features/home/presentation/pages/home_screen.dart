@@ -52,7 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       floatingActionButton: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 20),
+        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
         width: MediaQuery.of(context).size.width,
         child: FloatingActionButton(
           backgroundColor: AppPalette.appColor, onPressed: () {  },
@@ -81,7 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 20,),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -124,7 +124,7 @@ class _HomeScreenState extends State<HomeScreen> {
           const Divider(),
           Expanded(
             child: ListView.builder(
-              padding: const EdgeInsets.all(20.0),
+              padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 20),
               itemCount: myBookingsList.length,
               itemBuilder: (context, index) {
                 return Padding(
