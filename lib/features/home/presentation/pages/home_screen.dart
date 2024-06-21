@@ -18,6 +18,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
+
 
   @override
   void initState() {
@@ -68,6 +70,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
             body: RefreshIndicator(
+              key: _refreshIndicatorKey,
               displacement: 0,
               edgeOffset: 0,
               strokeWidth: 0,
