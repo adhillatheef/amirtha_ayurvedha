@@ -139,6 +139,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   const Divider(),
+                  value.isLoading? const SizedBox():
                   value.errorMessage != null ? Center(child: Text(
                       value.errorMessage!
                   ),) : value.patients == null || value.patients!.isEmpty

@@ -1,8 +1,11 @@
 import 'package:amirtha_ayurvedha/common/widgets/common_loading_widget.dart';
+import 'package:amirtha_ayurvedha/features/register/presentation/pdf_view_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../controller/registration_screen_provider.dart';
 import '../data/model/treatment_model.dart';
+import '../methods/generate_pdf.dart';
 import '../widgets/add_treatment_dialogue.dart';
 import '../widgets/payment_options_row.dart';
 import '../widgets/textfield_with_date_picker.dart';
@@ -79,6 +82,41 @@ class _RegisterScreenState extends State<RegisterScreen> {
     balanceAmountController.dispose();
     dateController.dispose();
     super.dispose();
+  }
+
+  void saveAndShowPdf(BuildContext context, {
+    required String name,
+    required String address,
+    required String whatsappNumber,
+    required String bookedOn,
+    required String treatmentDate,
+    required String treatmentTime,
+    required List<Map<String, dynamic>> treatments,
+    required double totalAmount,
+    required double discount,
+    required double advance,
+    required double balance,
+  }) async {
+    final pdfFile = await generatePdf(
+      name: name,
+      address: address,
+      whatsappNumber: whatsappNumber,
+      bookedOn: bookedOn,
+      treatmentDate: treatmentDate,
+      treatmentTime: treatmentTime,
+      treatments: treatments,
+      totalAmount: totalAmount,
+      discount: discount,
+      advance: advance,
+      balance: balance,
+    );
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PdfViewerPage(pdfFile: pdfFile),
+      ),
+    );
   }
 
   void _openTreatmentDialog(List<String> treatmentList) {
@@ -264,7 +302,45 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 paymentMethodSelected = false;
                               });
                             }else {
-
+                              final DateTime now = DateTime.now();
+                              final DateFormat formatter = DateFormat('dd/MM/yyyy | hh:mma');
+                              final String formattedDate = formatter.format(now);
+                              saveAndShowPdf(
+                                context,
+                                name: nameController.text.trim(),
+                                address: addressController.text.trim(),
+                                whatsappNumber: '+91 ${whatsappNumberController.text.trim()}',
+                                bookedOn: formattedDate,
+                                treatmentDate: dateController.text.trim(),
+                                treatmentTime: '$selectedHour: $selectedMinutes',
+                                treatments: [
+                                  {
+                                    'name': 'Panchakarma',
+                                    'price': 230,
+                                    'male': 4,
+                                    'female': 4,
+                                    'total': 2540,
+                                  },
+                                  {
+                                    'name': 'Njavara Kizhi Treatment',
+                                    'price': 230,
+                                    'male': 4,
+                                    'female': 4,
+                                    'total': 2540,
+                                  },
+                                  {
+                                    'name': 'Panchakarma',
+                                    'price': 230,
+                                    'male': 4,
+                                    'female': 6,
+                                    'total': 2540,
+                                  },
+                                ],
+                                totalAmount: 7620,
+                                discount: 500,
+                                advance: 1200,
+                                balance: 5920,
+                              );
                             }
                           }
                         }),
