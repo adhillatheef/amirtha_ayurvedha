@@ -1,6 +1,5 @@
 import 'package:amirtha_ayurvedha/common/secrets/token.dart';
 import 'package:amirtha_ayurvedha/common/theme/themes.dart';
-import 'package:amirtha_ayurvedha/features/auth/data/repository/login_repository.dart';
 import 'package:amirtha_ayurvedha/features/auth/presentation/pages/login_screen.dart';
 import 'package:amirtha_ayurvedha/features/register/controller/registration_screen_provider.dart';
 import 'package:amirtha_ayurvedha/features/register/presentation/register_screen.dart';
@@ -43,7 +42,6 @@ class MyApp extends StatelessWidget {
           '/HomeScreen' : (context) => const HomeScreen(),
           '/RegisterScreen' : (context) => const RegisterScreen(),
         },
-        //home: const SplashScreen(),
       ),
     );
   }

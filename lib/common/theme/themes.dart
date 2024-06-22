@@ -18,6 +18,7 @@ class AppTheme {
         width: 0.85,
       ));
   static final theme = ThemeData.light().copyWith(
+    scaffoldBackgroundColor: Colors.white,
     colorScheme: ColorScheme.fromSeed(seedColor: AppPalette.appColor),
     inputDecorationTheme: InputDecorationTheme(
       filled: true,

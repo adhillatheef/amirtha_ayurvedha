@@ -1,6 +1,5 @@
 import 'package:amirtha_ayurvedha/common/secrets/token.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../data/model/patient_model.dart';
 import '../data/repository/home_screen_repository.dart';
 
